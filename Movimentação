@@ -1,0 +1,73 @@
+///Seção Create
+//movimentação e gravidade
+
+spd		 = 0.1;	//velocidade     
+grav	 = 0.3; //gravidade
+spd_chao = spd; //velocidade enquanto desce
+spd_ar   = 0.4; //velocidade enquanto sobe
+hsp		 = 0;
+vsp		 = 0;
+hsp_max  = 6;	//velocidade maxima
+jump     = 9;	//pulo
+
+///Seção Step
+//variaveis de teclas
+
+//As primeiras vars vão iniciar os botões de movimento
+//move_x é um sistema de 1,-1 e 0 para direita, esquerda e parado
+//o hsp tem um sistema de suavizar a aceleraçã
+//var chao é um detectador de colisão da gravidade
+var chao	 = place_meeting(x, y + 1, obj_solido);
+var left	 = keyboard_check(ord("A"));
+var right	 = keyboard_check(ord("D"));
+var up		 = keyboard_check_pressed(ord("W"));
+var move_x   = (right - left) * hsp_max;
+
+//o lerp vai suavizar a movimentação
+hsp = lerp(hsp, move_x, spd);
+
+//checa se vc está no ar ou não
+if	(!chao)
+	{
+	spd = spd_ar;
+	vsp += grav;
+	}
+else					
+	{
+	spd = spd_chao;	
+	}
+
+//checa se vc pode pular e efetua o mesmo
+if (chao && up)
+   {
+   vsp += -jump;
+   }
+
+//limita a velocidade
+hsp = clamp(-hsp_max, hsp_max, hsp);
+
+///Seção Final Step
+//colisão
+
+//Checa se vc vai colidir e diminui a distância de colisão
+if (place_meeting(x + hsp, y, obj_solido))
+	{
+	while  (!place_meeting(x + sign(hsp), y, obj_solido))
+			{
+			x += sign(hsp);
+			}
+	hsp = 0;
+	}
+
+x += hsp;
+
+if (place_meeting(x, y + vsp, obj_solido))
+	{
+	while  (!place_meeting(x, y + sign(vsp), obj_solido))
+			{
+			y += sign(vsp);
+			}
+	vsp = 0;
+	}
+
+y += vsp;
