@@ -1,0 +1,6 @@
+n = str('Antecessor e Sucessor')
+print('{}'.format(n))
+n1 = int(input('Digite uma número: '))
+n2 = int(n1 - 1)
+n3 = int(n1 + 1)
+print('O antecessor e sucessor de {} são: {} e {}'.format(n1, n2, n3))

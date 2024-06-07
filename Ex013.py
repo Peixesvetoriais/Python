@@ -1,0 +1,5 @@
+print('Acresimo de 15% no Salário')
+salario = float(input('Digite o valor do salário requisitado: '))
+desconto = float(salario * (15 / 100))
+salariofinal = float(salario + desconto)
+print('O salário final requisitado será mostrado no visor: {}'.format(salariofinal))
